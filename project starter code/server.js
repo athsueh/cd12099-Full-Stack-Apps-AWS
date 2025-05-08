@@ -33,7 +33,11 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util.js';
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async (req, res) => {
+  app.get("/", (req, res) => {
+    res.send("Welcome to the Image Filter API! Use /filteredimage?image_url={{URL}} to filter an image.");
+  });
+
+  app.get( "/filteredimage", async (req, res) => {
      // Get the image URL from the query parameters
      const image_url = req.query.image_url;
 
@@ -43,8 +47,11 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util.js';
      }
  
      try {
+         console.log('Image URL:', image_url);
          // Call the filterImageFromURL function
-         const filteredImagePath = await filterImageFromURL(image_url);
+         let filteredImagePath = await filterImageFromURL(image_url);
+         
+         console.log('New URL:', filteredImagePath)
  
          // Send the filtered image back to the client
          res.status(200).sendFile(filteredImagePath, () => {
